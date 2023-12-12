@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
- 
+import fallBackImage from "./images/fallBackImage.png"
+
 function App() {
   const [data, setData] = useState({});
   const url = "https://dog.ceo/api/breeds/image/random"
@@ -20,7 +21,7 @@ function App() {
     fetchData()
     setcounter(counter + 1)
   }
-  const fallBackImage = "../images/fallBackImage.PNG"
+  
   const onImageError = (e) => e.target.src = fallBackImage;
   const breedsName = data.message ? data.message.split("/")[4] : "";
  
@@ -37,7 +38,7 @@ function App() {
       </div>
       <div className='content'>
       <p> breeds:  {breedsName}</p> 
-      <img src={data.message ? data.message : fallBackImage} onError={onImageError} alt={breedsName} />
+      <img src={data.message} onError={onImageError} alt={breedsName} />
       </div>
       </div>
       </div>
