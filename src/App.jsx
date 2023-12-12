@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
-
+ 
 function App() {
   const [data, setData] = useState({});
   const url = "https://dog.ceo/api/breeds/image/random"
   const [counter, setcounter] = useState(0)
 
   useEffect(() => {
-    async function fetchData() {
-      const result = await fetch(url);
-      const body = await result.json();
-      setData(body);
-    }
     fetchData();
-  }, [counter]);
+  }, []);
+
+  const fetchData = async function () {
+    const response = await fetch(url);
+    const data = await response.json();
+    setData(data);
+  }
+
   const counterHundler = () => {  
+    fetchData()
     setcounter(counter + 1)
   }
+  const fallBackImage = "../images/fallBackImage.PNG"
+  const onImageError = (e) => e.target.src = fallBackImage;
+  const breedsName = data.message ? data.message.split("/")[4] : "";
  
   return (
     <>
@@ -27,11 +33,11 @@ function App() {
       <div className='card'>
         <div className='controller'>
     <button className="button" onClick={counterHundler} >Refresh</button>
-    <p className='counter'>{`Api calls you have made ${counter} time's `}</p>
+    <p >Api calls you have made <span className='counter'>{counter}</span> time's </p>
       </div>
       <div className='content'>
-      <p> breeds:  {data.message ? data.message.split("/")[4] : ""}</p> 
-      <img src={data.message} />
+      <p> breeds:  {breedsName}</p> 
+      <img src={data.message ? data.message : fallBackImage} onError={onImageError} alt={breedsName} />
       </div>
       </div>
       </div>
